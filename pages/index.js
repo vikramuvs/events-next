@@ -1,73 +1,94 @@
-import Link from 'next/link';
-import { Fragment } from 'react';
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Link from "next/link";
+import { Fragment } from "react";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import MainNavigation from "../components/Layout/MainNavigation";
+import EventList from '../components/eventList/EventList';
+import { useState, useEffect } from "react";
 
-export default function Home() {
+const EVENT_LIST = [{
+  eventTitle: 'Dummy Title',
+  eventThumb: "https://lh3.googleusercontent.com/HTBrf7de3Isc5ZvFsykmvl86dV33PkWesiB8IQC5cTLpR7KvvCnCEPpESdYpgQZtBT1YlE9nz3pCtA9nuN8hE9if-1kwL-g3M0_k7_AQgJjdCBMWDfUhKyNS1nz-4C_65J_333Pn3oKvaRam9DsCbYPxkUK_z0XahCbxc4nnquMxTmoMzYwBVp67p-lg9Q31aJ8RhZapRtZrio8ocEQmDKgeJWe7ZzZIdbJQECJwM7WYdWABpMdIL2FPgIgu-gVhJVIu3ZG3Oz7Q2WJhH2sOLal45RmKc2Wi7aq-5ljVyJGVRjBTIV73LuSxaiAslDkX6WOxATXgh1yRm6z8eFXz6g6SdN4gE4N-gBmpQjv_moprRsfnH5Xd17xde71UxdehGe3-4qRmGFNrilfcHeHdD_fRP-MpWy8PoLDL94djC0B0HIJRZCCLqKaaS0bbTpbUlySiZ1APHlPEWsW-FVAd8nj4GkMYrUvxzjQ3X0rhYPVlULEZAA8Bz24bAcOqxgHcUW1dPUhXBwx1jZ5b0o8j7ExXVhAD2dYMIv_hcejT-h29byvzjbnOcXBlv0J_c7M2MS5yYSZnhnAizVuymMx4W_ltMH_U5nW4sZWPf8TXl5VhTHPar9lThqs2oQ8Lo9PLoqiGvyb5Mia2gD4tfBv9r_PigRWALGfXEKb3rKGGccypZ1ASr0xfssIhvjjJQ8B_udJdq9LE5dj_0LVC9RUUfAI=w1882-h604-no",
+  eventDescription: "lorem ipsum lorem upsusadadoaisd asdipaosd asdoais adasdad adasd a ad ada a daasdad",
+  eventStartDate: '10-02-2021',
+  eventEndDate: '11-02-2021',
+  slideshow: true,
+  video: true,
+},
+{
+  eventTitle: 'Dummy Title',
+  eventThumb: "https://lh3.googleusercontent.com/HTBrf7de3Isc5ZvFsykmvl86dV33PkWesiB8IQC5cTLpR7KvvCnCEPpESdYpgQZtBT1YlE9nz3pCtA9nuN8hE9if-1kwL-g3M0_k7_AQgJjdCBMWDfUhKyNS1nz-4C_65J_333Pn3oKvaRam9DsCbYPxkUK_z0XahCbxc4nnquMxTmoMzYwBVp67p-lg9Q31aJ8RhZapRtZrio8ocEQmDKgeJWe7ZzZIdbJQECJwM7WYdWABpMdIL2FPgIgu-gVhJVIu3ZG3Oz7Q2WJhH2sOLal45RmKc2Wi7aq-5ljVyJGVRjBTIV73LuSxaiAslDkX6WOxATXgh1yRm6z8eFXz6g6SdN4gE4N-gBmpQjv_moprRsfnH5Xd17xde71UxdehGe3-4qRmGFNrilfcHeHdD_fRP-MpWy8PoLDL94djC0B0HIJRZCCLqKaaS0bbTpbUlySiZ1APHlPEWsW-FVAd8nj4GkMYrUvxzjQ3X0rhYPVlULEZAA8Bz24bAcOqxgHcUW1dPUhXBwx1jZ5b0o8j7ExXVhAD2dYMIv_hcejT-h29byvzjbnOcXBlv0J_c7M2MS5yYSZnhnAizVuymMx4W_ltMH_U5nW4sZWPf8TXl5VhTHPar9lThqs2oQ8Lo9PLoqiGvyb5Mia2gD4tfBv9r_PigRWALGfXEKb3rKGGccypZ1ASr0xfssIhvjjJQ8B_udJdq9LE5dj_0LVC9RUUfAI=w1882-h604-no",
+  eventDescription: "lorem ipsum lorem upsusadadoaisd asdipaosd asdoais adasdad adasd a ad ada a daasdad",
+  eventStartDate: '10-02-2021',
+  eventEndDate: '11-02-2021',
+  slideshow: true,
+  video: true,
+},
+{
+  eventTitle: 'Dummy Title',
+  eventThumb: "https://lh3.googleusercontent.com/HTBrf7de3Isc5ZvFsykmvl86dV33PkWesiB8IQC5cTLpR7KvvCnCEPpESdYpgQZtBT1YlE9nz3pCtA9nuN8hE9if-1kwL-g3M0_k7_AQgJjdCBMWDfUhKyNS1nz-4C_65J_333Pn3oKvaRam9DsCbYPxkUK_z0XahCbxc4nnquMxTmoMzYwBVp67p-lg9Q31aJ8RhZapRtZrio8ocEQmDKgeJWe7ZzZIdbJQECJwM7WYdWABpMdIL2FPgIgu-gVhJVIu3ZG3Oz7Q2WJhH2sOLal45RmKc2Wi7aq-5ljVyJGVRjBTIV73LuSxaiAslDkX6WOxATXgh1yRm6z8eFXz6g6SdN4gE4N-gBmpQjv_moprRsfnH5Xd17xde71UxdehGe3-4qRmGFNrilfcHeHdD_fRP-MpWy8PoLDL94djC0B0HIJRZCCLqKaaS0bbTpbUlySiZ1APHlPEWsW-FVAd8nj4GkMYrUvxzjQ3X0rhYPVlULEZAA8Bz24bAcOqxgHcUW1dPUhXBwx1jZ5b0o8j7ExXVhAD2dYMIv_hcejT-h29byvzjbnOcXBlv0J_c7M2MS5yYSZnhnAizVuymMx4W_ltMH_U5nW4sZWPf8TXl5VhTHPar9lThqs2oQ8Lo9PLoqiGvyb5Mia2gD4tfBv9r_PigRWALGfXEKb3rKGGccypZ1ASr0xfssIhvjjJQ8B_udJdq9LE5dj_0LVC9RUUfAI=w1882-h604-no",
+  eventDescription: "lorem ipsum lorem upsusadadoaisd asdipaosd asdoais adasdad adasd a ad ada a daasdad",
+  eventStartDate: '10-02-2021',
+  eventEndDate: '11-02-2021',
+  slideshow: true,
+  video: true,
+},
+{
+  eventTitle: 'Dummy Title',
+  eventThumb: "https://lh3.googleusercontent.com/HTBrf7de3Isc5ZvFsykmvl86dV33PkWesiB8IQC5cTLpR7KvvCnCEPpESdYpgQZtBT1YlE9nz3pCtA9nuN8hE9if-1kwL-g3M0_k7_AQgJjdCBMWDfUhKyNS1nz-4C_65J_333Pn3oKvaRam9DsCbYPxkUK_z0XahCbxc4nnquMxTmoMzYwBVp67p-lg9Q31aJ8RhZapRtZrio8ocEQmDKgeJWe7ZzZIdbJQECJwM7WYdWABpMdIL2FPgIgu-gVhJVIu3ZG3Oz7Q2WJhH2sOLal45RmKc2Wi7aq-5ljVyJGVRjBTIV73LuSxaiAslDkX6WOxATXgh1yRm6z8eFXz6g6SdN4gE4N-gBmpQjv_moprRsfnH5Xd17xde71UxdehGe3-4qRmGFNrilfcHeHdD_fRP-MpWy8PoLDL94djC0B0HIJRZCCLqKaaS0bbTpbUlySiZ1APHlPEWsW-FVAd8nj4GkMYrUvxzjQ3X0rhYPVlULEZAA8Bz24bAcOqxgHcUW1dPUhXBwx1jZ5b0o8j7ExXVhAD2dYMIv_hcejT-h29byvzjbnOcXBlv0J_c7M2MS5yYSZnhnAizVuymMx4W_ltMH_U5nW4sZWPf8TXl5VhTHPar9lThqs2oQ8Lo9PLoqiGvyb5Mia2gD4tfBv9r_PigRWALGfXEKb3rKGGccypZ1ASr0xfssIhvjjJQ8B_udJdq9LE5dj_0LVC9RUUfAI=w1882-h604-no",
+  eventDescription: "lorem ipsum lorem upsusadadoaisd asdipaosd asdoais adasdad adasd a ad ada a daasdad",
+  eventStartDate: '10-02-2021',
+  eventEndDate: '11-02-2021',
+  slideshow: true,
+  video: true,
+}
+];
+
+ function Home(props) {
+
+  const [loadedEvents, setLoadedEvents] = useState([]);
+
+  useEffect(() => {
+    //send http request and fetch data
+    setLoadedEvents(EVENT_LIST);
+  }, []);
+
   return (
     <div className={styles.container}>
-
       <Head>
-        <title>Create Next App</title>
-        <meta name="description" content="Generated by create next app" />
+        <title>RIT | Events</title>
+        <meta name="description" content="Events conducted at RIT, Bengaluru" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+      <MainNavigation />
+
+      <div className={styles.main}>
+        <h1>
+          Events conducted at Ramaiah Institute of Technology, Bengaluru
         </h1>
+        
+          <EventList 
+            details={props.details}
+          />
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+      </div>
 
       <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
+        Copyright. All Rights Reserved.
       </footer>
     </div>
-
-  )
+  );
 }
+
+export async function getStaticProps() {
+  return {
+    props: {
+      details: EVENT_LIST
+    },
+    revalidate: 1
+  };
+}
+
+export default Home;

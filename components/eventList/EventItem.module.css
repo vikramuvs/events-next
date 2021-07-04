@@ -1,0 +1,15 @@
+.eventItem {
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    padding: 0px;
+    border: 2px solid grey;
+}
+
+.hLink {
+    cursor: pointer;
+}
+
+.hlink:hover {
+    text-decoration: underline;
+}
