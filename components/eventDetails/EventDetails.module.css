@@ -1,0 +1,33 @@
+.eventDetailsContainer {
+    display: grid;
+    /* grid-template: 1fr 1fr 1fr 1fr
+                    1fr 1fr 1fr 1fr
+                    1fr 1fr 1fr 1fr
+                    1fr 1fr 1fr 1fr
+                    ; */
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    height: 100vh;
+    width: 100%;
+}
+
+.eventImageContainer {
+    grid-row-start: 1;
+    grid-row-end: 4;
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+.eventDetailsTitle {
+    grid-row-start: 4;
+    grid-column-start: ;
+}
+
+.eventDetailsDate {
+
+}
+
+.eventDetailsDescription {
+
+}
+

@@ -10,7 +10,7 @@ function EventList(props) {
         startDate={eventItem.eventStartDate}
         endDate={eventItem.eventEndDate}
         thumb={eventItem.eventThumb}
-        id={eventItem.i}
+        id={eventItem.id}
         />);
 
     return (

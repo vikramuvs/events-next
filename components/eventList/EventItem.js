@@ -6,7 +6,7 @@ function EventItem(props) {
     const router = useRouter();
 
     function eventClickHandler() {
-        router.push('/eventDetails' + props.id );
+        router.push('/eventDetails/' + props.id );
     }
 
   return (
