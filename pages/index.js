@@ -9,12 +9,12 @@ import { useState, useEffect } from "react";
 import { MongoClient } from "mongodb";
 
 function Home(props) {
-  const [loadedEvents, setLoadedEvents] = useState([]);
+  // const [loadedEvents, setLoadedEvents] = useState([]);
 
-  useEffect(() => {
-    //send http request and fetch data
-    setLoadedEvents(EVENT_LIST);
-  }, []);
+  // useEffect(() => {
+  //   //send http request and fetch data
+  //   setLoadedEvents(EVENT_LIST);
+  // }, []);
 
   return (
     <div className={styles.container}>
@@ -60,6 +60,7 @@ export async function getStaticProps() {
         slideshow: event.hasSlideshow,
         video: event.hasVideo,
         id: event._id.toString(),
+        id: event._id.toString()
       })),
     },
     revalidate: 1,

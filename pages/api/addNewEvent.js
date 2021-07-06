@@ -5,6 +5,8 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     const data = req.body;
 
+   // console.log(data.enterdImage);
+
     const client = await MongoClient.connect('mongodb+srv://vikramuvs:eureka123@cluster0.hvhou.mongodb.net/events?retryWrites=true&w=majority')
     const db = client.db();
 
